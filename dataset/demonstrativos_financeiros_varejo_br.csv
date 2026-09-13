@@ -1,0 +1,19 @@
+empresa,ticker,ano,receita_liquida_r_milhoes,resultado_liquido_r_milhoes,patrimonio_liquido_r_milhoes,divida_bruta_r_milhoes,divida_liquida_r_milhoes,observacao
+Magazine Luiza,MGLU3,2020,29235.0,391.7,7300.0,,-1200.0,Ano pre-pandemia/pandemia; posicao de caixa liquido (divida liquida negativa)
+Magazine Luiza,MGLU3,2021,35300.0,590.7,11300.0,,2700.0,
+Magazine Luiza,MGLU3,2022,37299.0,-499.0,10648.7,7108.8,,Prejuizo no exercicio
+Magazine Luiza,MGLU3,2023,36768.1,-979.1,9610.5,5354.9,,Prejuizo aprofundado; reducao de divida bruta
+Magazine Luiza,MGLU3,2024,,,,,,Nao coletado nesta rodada (ver secao de limitacoes)
+Americanas,AMER3,2020,,,,,,Nao coletado (pre-fraude; fora do periodo critico analisado)
+Americanas,AMER3,2021,22521.0,-6237.0,,,13945.0,"Valores republicados (restatement) apos descoberta da fraude contabil em jan/2023; lucro originalmente divulgado era de R$544 milhoes"
+Americanas,AMER3,2022,25800.0,-12912.0,-26700.0,37300.0,26300.0,"Ano de descoberta publica da fraude contabil (11/jan/2023); patrimonio liquido negativo"
+Americanas,AMER3,2023,14900.0,-2270.0,-28800.0,39400.0,,Empresa em recuperacao judicial
+Americanas,AMER3,2024,14300.0,8200.0,,,,"Resultado positivo puxado por ganho financeiro nao recorrente de quitacao/negociacao de dividas"
+Via/Grupo Casas Bahia,VIIA3/BHIA3,2021,,,,,,"Nao coletado de forma confiavel nesta rodada (ver limitacoes); empresa ainda operava como Via S.A."
+Via/Grupo Casas Bahia,VIIA3/BHIA3,2022,,-342.0,,,,"Receita nao coletada nesta rodada"
+Via/Grupo Casas Bahia,VIIA3/BHIA3,2023,28847.0,-2625.0,3454.0,3983.0,,Rebrand para Grupo Casas Bahia em curso
+Via/Grupo Casas Bahia,VIIA3/BHIA3,2024,27206.0,-1045.0,2477.0,4069.0,-360.0,"Divida liquida ajustada negativa (posicao de caixa apos ajustes)"
+Lojas Renner,LREN3,2021,9555.4,1291.7,,,,"Receita liquida de varejo (nao inclui receita financeira da Realize)"
+Lojas Renner,LREN3,2022,11575.8,976.3,,,,"Receita liquida de varejo"
+Lojas Renner,LREN3,2023,11706.3,1196.7,,,,"Receita liquida de varejo"
+Lojas Renner,LREN3,2024,12672.0,,,,,"Receita liquida de varejo; lucro liquido consolidado nao extraido nesta rodada"

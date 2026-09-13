@@ -1,0 +1,16 @@
+empresa,ticker,ano,receita_liquida_r_milhoes,resultado_liquido_r_milhoes,patrimonio_liquido_r_milhoes,divida_bruta_r_milhoes,divida_liquida_r_milhoes,observacao,margem_liquida_pct,patrimonio_liquido_negativo,alavancagem,sinal_alerta_risco
+Magazine Luiza,MGLU3,2020,29235.0,391.7,7300.0,,-1200.0,Ano pre-pandemia/pandemia; posicao de caixa liquido (divida liquida negativa),1.3398323926800066,False,,False
+Magazine Luiza,MGLU3,2021,35300.0,590.7,11300.0,,2700.0,,1.6733711048158642,False,,False
+Magazine Luiza,MGLU3,2022,37299.0,-499.0,10648.7,7108.8,,Prejuizo no exercicio,-1.3378374755355371,False,0.6675744457069877,True
+Magazine Luiza,MGLU3,2023,36768.1,-979.1,9610.5,5354.9,,Prejuizo aprofundado; reducao de divida bruta,-2.6629061605032622,False,0.557192653868165,True
+Americanas,AMER3,2021,22521.0,-6237.0,,,13945.0,Valores republicados (restatement) apos descoberta da fraude contabil em jan/2023; lucro originalmente divulgado era de R$544 milhoes,-27.69415212468363,False,,True
+Americanas,AMER3,2022,25800.0,-12912.0,-26700.0,37300.0,26300.0,Ano de descoberta publica da fraude contabil (11/jan/2023); patrimonio liquido negativo,-50.04651162790697,True,,True
+Americanas,AMER3,2023,14900.0,-2270.0,-28800.0,39400.0,,Empresa em recuperacao judicial,-15.234899328859061,True,,True
+Americanas,AMER3,2024,14300.0,8200.0,,,,Resultado positivo puxado por ganho financeiro nao recorrente de quitacao/negociacao de dividas,57.34265734265735,False,,False
+Via/Grupo Casas Bahia,VIIA3/BHIA3,2022,,-342.0,,,,Receita nao coletada nesta rodada,,False,,True
+Via/Grupo Casas Bahia,VIIA3/BHIA3,2023,28847.0,-2625.0,3454.0,3983.0,,Rebrand para Grupo Casas Bahia em curso,-9.09973307449648,False,1.1531557614360162,True
+Via/Grupo Casas Bahia,VIIA3/BHIA3,2024,27206.0,-1045.0,2477.0,4069.0,-360.0,Divida liquida ajustada negativa (posicao de caixa apos ajustes),-3.8410644710725577,False,1.6427129592248688,True
+Lojas Renner,LREN3,2021,9555.4,1291.7,,,,Receita liquida de varejo (nao inclui receita financeira da Realize),13.518010758314672,False,,False
+Lojas Renner,LREN3,2022,11575.8,976.3,,,,Receita liquida de varejo,8.433974325748544,False,,False
+Lojas Renner,LREN3,2023,11706.3,1196.7,,,,Receita liquida de varejo,10.222700597114375,False,,False
+Lojas Renner,LREN3,2024,12672.0,,,,,Receita liquida de varejo; lucro liquido consolidado nao extraido nesta rodada,,False,,False
