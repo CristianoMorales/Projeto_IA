@@ -11,6 +11,7 @@ Projeto da disciplina **Inteligência Artificial – 7ºK SI Noite** (Prof. Dr. 
 | Cristiano Morales | 10437953 | 10437953@mackenzista.com.br |
 | Caio Carames | 10308718 | 10308718@mackenzista.com.br |
 | Leonardo Tonon | 10426930 | 10426930@mackenzista.com.br |
+| Ali Ahmad | 10427712 | 10427712@mackenzista.com.br |
 
 ## Estrutura do repositório
 
