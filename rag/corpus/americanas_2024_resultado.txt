@@ -1,0 +1,8 @@
+[DOC_ID] americanas_2024_resultado
+[EMPRESA] Americanas
+[PERIODO] 2024
+[FONTE] Americanas reverte lucro e registra prejuizo de R$ 586 mi no 4T24 - Safras & Mercado
+[TIPO_FONTE] Imprensa especializada
+[OBS] Texto de sintese original, redigido pelo grupo a partir da fonte citada acima; nao e copia literal de nenhum documento ou materia.
+----------------------------------------------------------------------
+Em 2024, a Americanas reportou resultado liquido positivo de cerca de R$ 8,2 bilhoes no ano cheio, revertendo a sequencia de prejuizos anuais desde a descoberta da fraude. Esse resultado, no entanto, foi impulsionado majoritariamente por um ganho financeiro nao recorrente relacionado a quitacao e renegociacao de dividas no ambito da recuperacao judicial (deducao contabil do passivo perdoado), e nao por uma melhora estrutural da operacao de varejo. A receita liquida do ano ficou em torno de R$ 14,3 bilhoes, estavel em relacao a 2023. E importante que um sistema de analise de risco nao confunda esse lucro contabil pontual com recuperacao operacional sustentavel.

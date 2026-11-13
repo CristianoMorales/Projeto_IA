@@ -1,0 +1,10 @@
+doc_id,empresa,periodo,fonte,tipo_fonte,arquivo
+americanas_2023_fato_relevante,Americanas,jan/2023,Fato Relevante Americanas S.A. (11/01/2023) + cobertura InfoMoney/Poder360,Fato relevante oficial + imprensa especializada,corpus/americanas_2023_fato_relevante.txt
+americanas_2022_resultado,Americanas,2022,Demonstracoes financeiras 2022 (pos-descoberta da fraude) - cobertura InfoMoney,Imprensa especializada com base em divulgacao oficial,corpus/americanas_2022_resultado.txt
+americanas_2023_resultado,Americanas,2023,"Americanas tem prejuizo de R$ 2,27 bilhoes em 2023 - Poder360",Imprensa especializada,corpus/americanas_2023_resultado.txt
+americanas_2024_resultado,Americanas,2024,Americanas reverte lucro e registra prejuizo de R$ 586 mi no 4T24 - Safras & Mercado,Imprensa especializada,corpus/americanas_2024_resultado.txt
+magazineluiza_2022_resultado,Magazine Luiza,2022,Demonstracoes financeiras 2022 - Magazine Luiza RI,Documento oficial de RI,corpus/magazineluiza_2022_resultado.txt
+magazineluiza_2023_resultado,Magazine Luiza,2023,Demonstracoes financeiras 31/12/2023 - Magazine Luiza RI,Demonstracao financeira oficial (auditada),corpus/magazineluiza_2023_resultado.txt
+viacasasbahia_2022_resultado,Via/Grupo Casas Bahia,2022,Via Varejo tem prejuizo de R$ 342 milhoes em 2022 - Poder360,Imprensa especializada,corpus/viacasasbahia_2022_resultado.txt
+viacasasbahia_2023_2024_resultado,Via/Grupo Casas Bahia,2023-2024,Destaques dos Resultados - Grupo Casas Bahia RI (Mziq),Documento oficial de RI,corpus/viacasasbahia_2023_2024_resultado.txt
+lojasrenner_2021_2024_resultado,Lojas Renner,2021-2024,Relatorio Anual 2024 - Lojas Renner RI,Relatorio anual oficial (RI),corpus/lojasrenner_2021_2024_resultado.txt

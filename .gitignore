@@ -1,0 +1,16 @@
+# Chaves e segredos - NUNCA commitar
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Saidas geradas localmente (podem ser regeneradas pelos scripts)
+rag/outputs/
+
+# SO
+.DS_Store
+Thumbs.db
