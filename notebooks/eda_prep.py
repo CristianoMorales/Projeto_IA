@@ -13,12 +13,15 @@
 #   - Cristiano Morales      | RA 10437953 | 10437953@mackenzista.com.br
 #   - Caio Carames           | RA 10308718 | 10308718@mackenzista.com.br
 #   - Leonardo Tonon         | RA 10426930 | 10426930@mackenzista.com.br
+#   - Ali Ahmad              | RA 10427712 | 10427712@mackenzista.com.br
 #
 # Historico de atualizacoes:
 #   2026-09-13 | Cristiano Morales | Criacao do notebook: carga do dataset,
 #               limpeza/preparacao dos dados, analise exploratoria (estatisticas
 #               descritivas, tratamento de valores ausentes, visualizacoes de
 #               tendencia e comparacao entre empresas) para a entrega N1.
+#   2026-11-13 | Cristiano Morales | Atualizacao do cabecalho para a N2:
+#               inclusao de Ali Ahmad como integrante do grupo.
 # =============================================================================
 
 # %% [1] Imports -------------------------------------------------------------
