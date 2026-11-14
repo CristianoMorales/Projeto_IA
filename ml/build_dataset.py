@@ -3,26 +3,28 @@
 # Universidade Presbiteriana Mackenzie - Faculdade de Computacao e Informatica
 #
 # Titulo do arquivo: build_dataset.py
-# Sintese do conteudo: Constroi o dataset original do projeto (Opcao
-#   Framework/ML) a partir dos dados brutos e publicos da CVM (Comissao de
-#   Valores Mobiliarios) - Demonstracoes Financeiras Padronizadas (DFP) de
-#   2023, formato consolidado (DRE, BPP, BPA), referentes a TODAS as
-#   companhias de capital aberto brasileiras. Extrai, por empresa: receita
-#   liquida, resultado liquido, patrimonio liquido, passivo total e ativo
-#   total; calcula indicadores financeiros derivados (margem liquida,
-#   alavancagem, ROE, endividamento) e um rotulo de risco financeiro
-#   (baixo/medio/alto), usado como alvo de classificacao. O dataset
-#   resultante (dataset/cvm_dfp_2023_empresas.csv) e MUITO maior e mais
-#   robusto estatisticamente que o dataset manual da N1 (19 linhas, 4
-#   empresas), permitindo treinar modelos de classificacao/regressao reais
-#   com scikit-learn (ver ml/treinar_modelos.py).
+# Sintese do conteudo: Constroi o dataset do projeto (Opcao Framework/ML) a
+#   partir dos dados brutos e publicos da CVM - Demonstracoes Financeiras
+#   Padronizadas (DFP) de 2023 e 2024, formato consolidado (DRE, BPA, BPP),
+#   de TODAS as companhias abertas brasileiras. Extrai, por empresa e ano:
+#   receita liquida, resultado liquido, ativo total, total da conta 2 do
+#   passivo, patrimonio liquido e passivo exigivel (conta 2 - PL); calcula
+#   indicadores derivados e o rotulo de risco financeiro (baixo/medio/alto).
+#   Saida: dataset/cvm_dfp_empresas.csv (usado por ml/treinar_modelos.py).
 #
-#   Fonte dos dados brutos: CVM - Dados Abertos - Demonstracoes Financeiras
-#   Padronizadas (DFP), ano-base 2023.
-#   Portal: https://dados.cvm.gov.br/dataset/cia_aberta-doc-dfp
-#   Os arquivos brutos (ml/cvm_raw/*.csv) NAO sao versionados no Git (sao
-#   dados publicos volumosos, re-obteniveis no link acima); apenas o
-#   dataset processado (muito menor) e versionado.
+#   Cuidados que o script trata explicitamente:
+#   - ESCALA_MOEDA: a maioria das empresas informa em MIL, mas algumas
+#     informam em UNIDADE (reais). Sem essa conversao, essas empresas ficam
+#     1.000x maiores (ex.: Vivara com "lucro" de R$ 369 bilhoes).
+#   - VERSAO: usa apenas a versao mais recente de cada documento.
+#   - Conta 2 ("Passivo Total"): na CVM ela INCLUI o patrimonio liquido e e
+#     igual ao ativo total. Por isso nao e variavel independente do ativo;
+#     o passivo sem o PL e o "passivo exigivel", calculado aqui.
+#
+#   Fonte: CVM - Dados Abertos - DFP. Portal:
+#   https://dados.cvm.gov.br/dataset/cia_aberta-doc-dfp
+#   Os zips brutos (ml/cvm_raw/) sao baixados automaticamente e NAO sao
+#   versionados no Git; apenas o dataset processado e versionado.
 #
 # Integrantes do grupo:
 #   - Cristiano Morales      | RA 10437953 | 10437953@mackenzista.com.br
@@ -34,139 +36,153 @@
 #   2026-11-13 | Cristiano Morales | Criacao do script de extracao e
 #               processamento do dataset CVM DFP 2023 para a N2 (pivot da
 #               "Opcao API de LLM" para "Opcao Framework" de ML).
+#   2026-11-13 | Leonardo Tonon | Correcoes: conversao por ESCALA_MOEDA
+#               (8 empresas estavam 1.000x maiores), versao mais recente
+#               de cada DFP, passivo exigivel (conta 2 = ativo total),
+#               anos 2023 e 2024, setor do cadastro CVM, marcacao das 4
+#               varejistas e download automatico dos dados brutos.
 # =============================================================================
 
 import os
 import re
 import unicodedata
+import zipfile
 
 import numpy as np
 import pandas as pd
 
-ML_DIR = os.path.dirname(__file__)
+ML_DIR = os.path.dirname(os.path.abspath(__file__))
 RAW_DIR = os.path.join(ML_DIR, "cvm_raw")
 DATASET_DIR = os.path.join(os.path.dirname(ML_DIR), "dataset")
+SAIDA = os.path.join(DATASET_DIR, "cvm_dfp_empresas.csv")
 
-ARQ_DRE = os.path.join(RAW_DIR, "dfp_cia_aberta_DRE_con_2023.csv")
-ARQ_BPP = os.path.join(RAW_DIR, "dfp_cia_aberta_BPP_con_2023.csv")
-ARQ_BPA = os.path.join(RAW_DIR, "dfp_cia_aberta_BPA_con_2023.csv")
+ANOS = [2023, 2024]
+URL_DFP = "https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/DFP/DADOS/dfp_cia_aberta_{ano}.zip"
+URL_CAD = "https://dados.cvm.gov.br/dados/CIA_ABERTA/CAD/DADOS/cad_cia_aberta.csv"
 
-SAIDA = os.path.join(DATASET_DIR, "cvm_dfp_2023_empresas.csv")
-
-# Descricoes-alvo (DS_CONTA) para o resultado liquido / patrimonio liquido.
-# O CODIGO da conta (CD_CONTA) varia de empresa para empresa (depende da
-# profundidade do plano de contas de cada uma), mas a DESCRICAO do "bottom
-# line" e padronizada pela CVM - por isso casamos por descricao, nao por
-# codigo fixo.
-_RESULTADO_PADROES = [
-    "lucro/prejuizo consolidado do periodo",
-    "lucro ou prejuizo liquido consolidado do periodo",
-    "lucro/prejuizo do periodo",
-    "resultado liquido do periodo",
-]
-_PL_PADRAO = "patrimonio liquido consolidado"
+VAREJISTAS = {
+    "Magazine Luiza": r"^MAGAZINE LUIZA",
+    "Americanas": r"^(?:AMERICANAS S\.?A|LOJAS AMERICANAS)",
+    "Grupo Casas Bahia": r"^(?:VIA S\.?A|VIA VAREJO|GRUPO CASAS BAHIA)",
+    "Lojas Renner": r"^LOJAS RENNER",
+}
+SETORES_FINANCEIROS = ("BANCO", "INTERMEDIACAO FINANCEIRA", "SEGURADORA", "ARRENDAMENTO",
+                       "SECURITIZACAO", "CREDITO", "PREVIDENCIA", "BOLSA")
 
 
-def _normalizar(texto: str) -> str:
+def _normalizar(texto) -> str:
     nfkd = unicodedata.normalize("NFKD", str(texto))
     sem_acento = "".join(c for c in nfkd if not unicodedata.combining(c))
-    return sem_acento.lower().strip()
+    return re.sub(r"\s+", " ", sem_acento).strip().upper()
 
 
-def _extrair_conta(df, padroes, nome_coluna):
-    """Filtra linhas cujo DS_CONTA normalizado bate com algum dos padroes,
-    para o exercicio atual (ORDEM_EXERC == 'ÚLTIMO'), e retorna um DataFrame
-    indexado por CNPJ_CIA com uma unica coluna (nome_coluna)."""
+def _baixar(url: str, destino: str) -> str:
+    if os.path.exists(destino) and os.path.getsize(destino) > 0:
+        return destino
+    import requests
+    os.makedirs(os.path.dirname(destino), exist_ok=True)
+    print(f"Baixando {url} ...")
+    with requests.get(url, stream=True, timeout=180) as r:
+        r.raise_for_status()
+        with open(destino + ".part", "wb") as f:
+            for bloco in r.iter_content(chunk_size=1 << 20):
+                f.write(bloco)
+    os.replace(destino + ".part", destino)
+    return destino
+
+
+def _ler_demonstracao(zf: zipfile.ZipFile, parte: str) -> pd.DataFrame:
+    """Le um CSV do zip DFP, mantendo so o exercicio atual e a versao mais
+    recente, e converte VL_CONTA para R$ milhoes conforme ESCALA_MOEDA."""
+    nome = next(n for n in zf.namelist() if parte.lower() in n.lower())
+    with zf.open(nome) as f:
+        df = pd.read_csv(f, sep=";", encoding="latin1", dtype=str)
+    df.columns = [c.strip().upper() for c in df.columns]
+    df["VL_CONTA"] = pd.to_numeric(df["VL_CONTA"], errors="coerce")
+    df["VERSAO"] = pd.to_numeric(df["VERSAO"], errors="coerce").fillna(1).astype(int)
+    df = df[df["ORDEM_EXERC"].map(_normalizar) == "ULTIMO"]
+    df = df[df["VERSAO"] == df.groupby("CNPJ_CIA")["VERSAO"].transform("max")].copy()
+    fator = df["ESCALA_MOEDA"].map(_normalizar).map({"MIL": 1e-3, "UNIDADE": 1e-6}).fillna(1e-3)
+    df["VALOR_MI"] = df["VL_CONTA"] * fator
+    df["DS_NORM"] = df["DS_CONTA"].map(_normalizar)
+    df["NIVEL"] = df["CD_CONTA"].str.count(r"\.")
+    return df
+
+
+def _por_codigo(df, codigo, nome):
+    return df[df["CD_CONTA"] == codigo].groupby("CNPJ_CIA")["VALOR_MI"].first().rename(nome)
+
+
+def _por_descricao(df, nivel, condicao, nome):
+    sub = df[(df["NIVEL"] == nivel) & df["DS_NORM"].map(condicao)]
+    return sub.groupby("CNPJ_CIA")["VALOR_MI"].first().rename(nome)
+
+
+def montar_ano(ano: int) -> pd.DataFrame:
+    caminho = _baixar(URL_DFP.format(ano=ano), os.path.join(RAW_DIR, f"dfp_cia_aberta_{ano}.zip"))
+    with zipfile.ZipFile(caminho) as zf:
+        dre = _ler_demonstracao(zf, "_DRE_con_")
+        bpa = _ler_demonstracao(zf, "_BPA_con_")
+        bpp = _ler_demonstracao(zf, "_BPP_con_")
+
+    receita = _por_codigo(dre, "3.01", "receita_liquida")
+    # O codigo do resultado e do PL varia entre planos de contas (ex.: bancos),
+    # por isso a busca e pela descricao padronizada, com o codigo como reserva.
+    resultado = _por_descricao(
+        dre, 1, lambda d: "CONSOLIDADO DO PERIODO" in d and ("LUCRO" in d or "PREJUIZO" in d),
+        "resultado_liquido").combine_first(_por_codigo(dre, "3.11", "resultado_liquido"))
+    ativo = _por_codigo(bpa, "1", "ativo_total")
+    passivo = _por_codigo(bpp, "2", "passivo_total")
+    pl = _por_descricao(bpp, 1, lambda d: d.startswith("PATRIMONIO LIQUIDO"),
+                        "patrimonio_liquido").combine_first(_por_codigo(bpp, "2.03", "patrimonio_liquido"))
+
+    nomes = dre.groupby("CNPJ_CIA")[["DENOM_CIA", "CD_CVM"]].first()
+    base = pd.concat([nomes, receita, resultado, ativo, passivo, pl], axis=1)
+    base.index.name = "CNPJ_CIA"
+    base = base.reset_index()
+    base["ano"] = ano
+    return base
+
+
+def anexar_setor_e_varejistas(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-    df["_ds_norm"] = df["DS_CONTA"].map(_normalizar)
-    if isinstance(padroes, str):
-        padroes = [padroes]
-    mascara = df["_ds_norm"].isin(padroes) & (df["ORDEM_EXERC"] == "ÚLTIMO")
-    filtrado = df[mascara].drop_duplicates(subset=["CNPJ_CIA"], keep="first")
-    resultado = filtrado.set_index("CNPJ_CIA")["VL_CONTA"].rename(nome_coluna)
-    return resultado
+    try:
+        cad = pd.read_csv(_baixar(URL_CAD, os.path.join(RAW_DIR, "cad_cia_aberta.csv")),
+                          sep=";", encoding="latin1", dtype=str)
+        cad.columns = [c.strip().upper() for c in cad.columns]
+        setor = cad.dropna(subset=["SETOR_ATIV"]).groupby("CNPJ_CIA")["SETOR_ATIV"].first()
+        df["setor"] = df["CNPJ_CIA"].map(setor)
+    except Exception as e:  # o cadastro e opcional
+        print(f"[aviso] cadastro da CVM nao carregado: {e}")
+        df["setor"] = None
+    df["financeira"] = df["setor"].fillna("").map(_normalizar).map(
+        lambda s: any(k in s for k in SETORES_FINANCEIROS))
+
+    # Marca as 4 varejistas da N1 (a de maior receita, se houver mais de uma)
+    df["varejista"] = None
+    dn = df["DENOM_CIA"].map(_normalizar)
+    for nome, padrao in VAREJISTAS.items():
+        for ano in df["ano"].unique():
+            m = dn.str.contains(padrao, regex=True, na=False) & (df["ano"] == ano)
+            if m.any():
+                df.loc[df.loc[m, "receita_liquida"].idxmax(), "varejista"] = nome
+    return df
 
 
-def carregar():
-    dre = pd.read_csv(ARQ_DRE, sep=";", encoding="latin1")
-    bpp = pd.read_csv(ARQ_BPP, sep=";", encoding="latin1")
-    bpa = pd.read_csv(ARQ_BPA, sep=";", encoding="latin1")
-
-    # Receita: primeira linha operacional da DRE (CD_CONTA "3.01"), exercicio atual
-    receita = dre[(dre["CD_CONTA"] == "3.01") & (dre["ORDEM_EXERC"] == "ÚLTIMO")]
-    receita = receita.drop_duplicates(subset=["CNPJ_CIA"], keep="first")
-    receita = receita.set_index("CNPJ_CIA")["VL_CONTA"].rename("receita_liquida")
-
-    resultado = _extrair_conta(dre, _RESULTADO_PADROES, "resultado_liquido")
-
-    # IMPORTANTE (correcao pos-revisao do grupo, 14/11/2026): o codigo "2" da
-    # BPP e rotulado "Passivo Total" na CVM, mas na estrutura de contas da
-    # CVM esse codigo JA INCLUI o Patrimonio Liquido como subconta (2.01
-    # Passivo Circulante + 2.02 Passivo Nao Circulante + 2.03 Patrimonio
-    # Liquido = 2 Passivo Total) - ou seja, "Passivo Total" (codigo 2) e,
-    # por construcao contabil, SEMPRE IGUAL ao Ativo Total (identidade
-    # Ativo = Passivo+PL). Usar o codigo "2" como variavel de entrada do
-    # modelo e um erro: ele duplica a coluna ativo_total (confirmado
-    # empiricamente: diferenca = 0,0 em todas as 474 empresas). A correcao
-    # extrai separadamente o Passivo Circulante (2.01) e o Passivo Nao
-    # Circulante (2.02) - as obrigacoes com terceiros, excluindo o PL -
-    # casando pela DESCRICAO da conta (nao pelo codigo), pois a descricao de
-    # 2.01/2.02 varia por tipo de instituicao (ex.: bancos/seguradoras usam
-    # rotulos diferentes de "Passivo Circulante").
-    passivo_circ = _extrair_conta(bpp, "passivo circulante", "passivo_circulante")
-    passivo_nao_circ = _extrair_conta(bpp, "passivo nao circulante", "passivo_nao_circulante")
-
-    patrimonio = _extrair_conta(bpp, _PL_PADRAO, "patrimonio_liquido")
-
-    # Ativo total: CD_CONTA == "1" (fixo e estavel em todas as empresas)
-    ativo = bpa[(bpa["CD_CONTA"] == "1") & (bpa["ORDEM_EXERC"] == "ÚLTIMO")]
-    ativo = ativo.drop_duplicates(subset=["CNPJ_CIA"], keep="first")
-    ativo = ativo.set_index("CNPJ_CIA")["VL_CONTA"].rename("ativo_total")
-
-    # Nomes das empresas (para leitura humana do dataset final)
-    nomes = dre[["CNPJ_CIA", "DENOM_CIA", "CD_CVM"]].drop_duplicates(subset=["CNPJ_CIA"])
-    nomes = nomes.set_index("CNPJ_CIA")
-
-    base = nomes.join([receita, resultado, passivo_circ, passivo_nao_circ, patrimonio, ativo], how="inner")
-    return base.reset_index()
-
-
-def calcular_indicadores(df):
+def calcular_indicadores(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-    # Unidade dos valores e "MIL" (milhares de reais) na maior parte dos
-    # arquivos DFP; convertendo para milhoes para ficar no mesmo padrao do
-    # dataset manual da N1.
-    for col in ["receita_liquida", "resultado_liquido", "passivo_circulante",
-                "passivo_nao_circulante", "patrimonio_liquido", "ativo_total"]:
-        df[col] = df[col] / 1000.0  # mil -> milhoes
-
-    # Passivo exigivel total (obrigacoes com terceiros, EXCLUINDO patrimonio
-    # liquido) - usado so para calcular alavancagem/endividamento/rotulo de
-    # risco, nunca como feature de entrada do modelo (ver ml/treinar_modelos.py:
-    # usar ativo_total junto com este valor permitiria reconstruir o
-    # patrimonio liquido por subtracao, o que seria vazamento de rotulo).
-    df["passivo_exigivel_total"] = df["passivo_circulante"] + df["passivo_nao_circulante"]
-
+    df["passivo_exigivel"] = df["passivo_total"] - df["patrimonio_liquido"]
     df["margem_liquida_pct"] = np.where(
-        df["receita_liquida"] != 0,
-        100 * df["resultado_liquido"] / df["receita_liquida"],
-        np.nan,
-    )
+        df["receita_liquida"] != 0, 100 * df["resultado_liquido"] / df["receita_liquida"], np.nan)
+    # Alavancagem como definida na primeira versao: conta 2 / PL (= ativo / PL)
     df["alavancagem"] = np.where(
-        df["patrimonio_liquido"] > 0,
-        df["passivo_exigivel_total"] / df["patrimonio_liquido"],
-        np.nan,
-    )
+        df["patrimonio_liquido"] > 0, df["passivo_total"] / df["patrimonio_liquido"], np.nan)
     df["roe_pct"] = np.where(
-        df["patrimonio_liquido"] > 0,
-        100 * df["resultado_liquido"] / df["patrimonio_liquido"],
-        np.nan,
-    )
+        df["patrimonio_liquido"] > 0, 100 * df["resultado_liquido"] / df["patrimonio_liquido"], np.nan)
+    # Endividamento sobre o ativo: passivo exigivel / ativo (com a conta 2,
+    # este indicador daria sempre 100%)
     df["endividamento_ativo_pct"] = np.where(
-        df["ativo_total"] != 0,
-        100 * df["passivo_exigivel_total"] / df["ativo_total"],
-        np.nan,
-    )
+        df["ativo_total"] != 0, 100 * df["passivo_exigivel"] / df["ativo_total"], np.nan)
     df["patrimonio_liquido_negativo"] = (df["patrimonio_liquido"] < 0).astype(int)
 
     def classificar_risco(linha):
@@ -182,28 +198,41 @@ def calcular_indicadores(df):
     return df
 
 
+COLUNAS = ["CNPJ_CIA", "DENOM_CIA", "CD_CVM", "ano", "setor", "financeira", "varejista",
+           "receita_liquida", "resultado_liquido", "ativo_total", "passivo_total",
+           "patrimonio_liquido", "passivo_exigivel", "margem_liquida_pct", "alavancagem",
+           "roe_pct", "endividamento_ativo_pct", "patrimonio_liquido_negativo", "risco_financeiro"]
+
+
+def finalizar(base: pd.DataFrame) -> pd.DataFrame:
+    """Remove linhas incompletas, calcula indicadores e ordena as colunas."""
+    obrig = ["receita_liquida", "resultado_liquido", "ativo_total", "passivo_total", "patrimonio_liquido"]
+    df = base.dropna(subset=obrig)
+    df = df[df["ativo_total"] > 0]
+    df = calcular_indicadores(df)
+    return df[COLUNAS].sort_values(["ano", "DENOM_CIA"]).reset_index(drop=True)
+
+
 def main():
     os.makedirs(DATASET_DIR, exist_ok=True)
-    print("Carregando e cruzando DRE + BPP + BPA (pode levar alguns segundos)...")
-    base = carregar()
-    print(f"Empresas com os 3 demonstrativos completos: {len(base)}")
-
-    df = calcular_indicadores(base)
-    df = df.sort_values("DENOM_CIA").reset_index(drop=True)
+    base = pd.concat([montar_ano(a) for a in ANOS], ignore_index=True)
+    base = anexar_setor_e_varejistas(base)
+    df = finalizar(base)
     df.to_csv(SAIDA, index=False, encoding="utf-8")
-    print(f"Dataset salvo em: {SAIDA}")
-    print(f"Total de empresas: {len(df)}")
-    print("Distribuicao de risco_financeiro:")
-    print(df["risco_financeiro"].value_counts())
 
-    print("\n--- Validacao cruzada: varejistas do estudo de caso (N1) ---")
-    alvo = ["AMERICANAS", "MAGAZINE LUIZA", "VIA S.A", "VIA VAREJO", "CASAS BAHIA", "LOJAS RENNER"]
-    padrao = "|".join(re.escape(a) for a in alvo)
-    encontrados = df[df["DENOM_CIA"].str.contains(padrao, case=False, na=False)]
-    cols = ["DENOM_CIA", "receita_liquida", "resultado_liquido", "patrimonio_liquido",
-            "passivo_circulante", "passivo_exigivel_total", "margem_liquida_pct", "alavancagem", "risco_financeiro"]
+    print(f"\nDataset salvo em: {SAIDA}")
+    print(df.groupby("ano").size().rename("empresas").to_string())
+    d23 = df[df["ano"] == 2023]
+    print("\nDistribuicao de risco_financeiro (2023):")
+    print(d23["risco_financeiro"].value_counts().to_string())
+    igual = (d23["passivo_total"] - d23["ativo_total"]).abs() <= 0.1
+    print(f"\nConta 2 ('Passivo Total') = Ativo Total em {igual.mean():.1%} das empresas")
+
+    print("\n--- Varejistas do estudo de caso (R$ milhoes) ---")
+    cols = ["ano", "varejista", "receita_liquida", "resultado_liquido", "patrimonio_liquido",
+            "ativo_total", "risco_financeiro"]
     with pd.option_context("display.float_format", lambda x: f"{x:,.1f}"):
-        print(encontrados[cols].to_string(index=False))
+        print(df[df["varejista"].notna()][cols].sort_values(["varejista", "ano"]).to_string(index=False))
 
 
 if __name__ == "__main__":

@@ -16,12 +16,9 @@ Integrantes do grupo:
 
 Historico de atualizacoes:
   2026-11-13 | Cristiano Morales | Criacao do roteiro do video da N2.
-  2026-11-14 | Cristiano Morales | Atualizacao dos numeros apos correcao de
-              3 problemas metodologicos (revisao interna do grupo): dataset
-              454 empresas (era 474), acuracia do Random Forest 58,6% com
-              comparacao explicita ao baseline (era so "47,7%"), e estudo
-              de caso com holdout real (1 de 4 acertos, era "4 de 4" com
-              vazamento treino/teste).
+  2026-11-13 | Leonardo Tonon | Falas e telas atualizadas com os resultados
+               do protocolo corrigido (varejistas fora do treino, baselines,
+               vazamento, experimento temporal).
 -->
 
 # Roteiro do vídeo — N2 (máximo 5 minutos)
@@ -44,47 +41,51 @@ Historico de atualizacoes:
 **Fala (ideias-chave, adaptem com suas palavras):**
 > "O projeto nasce de um caso real: a fraude contábil da Americanas, revelada em janeiro de 2023, que transformou um lucro declarado de R$ 544 milhões em um prejuízo de R$ 6,2 bilhões. Isso mostra como é difícil, analisando balanços manualmente, perceber a tempo que uma empresa está em risco financeiro grave.
 >
-> A pergunta que guiou o projeto foi: será que dá pra usar só alguns números simples do balanço de uma empresa — receita, ativo total e passivo circulante — para prever automaticamente se ela está em risco financeiro, sem precisar ler relatórios inteiros?"
+> A pergunta que guiou o projeto foi: será que dá pra usar só alguns números simples do balanço de uma empresa — receita e ativo total — para prever automaticamente se ela está em risco financeiro, sem precisar ler relatórios inteiros? E será que dá pra antecipar o risco do ano seguinte?"
 
 **Tela:** gráfico `fig_americanas_restatement.png` (dataset/) e/ou a Seção 2 do relatório (Descrição do Problema).
 
 ---
 
-## 3. Uso de IA e fundamentos da disciplina (1:30 – 2:45) — ~75s
+## 3. Uso de IA e fundamentos da disciplina (1:30 – 2:30) — ~60s
 
 **Fala:**
-> "A gente originalmente ia usar um modelo de linguagem (LLM) pra ler documentos de RI, mas a API gratuita que conseguimos não funcionou dentro do prazo — então migramos para a 'Opção Framework', usando Machine Learning clássico com a biblioteca scikit-learn. Isso está documentado com transparência no relatório, na seção 1.4.
+> "Na N1 a gente tinha escolhido a opção de API de LLM. Na N2 migramos para a 'Opção Framework', com Machine Learning clássico no scikit-learn: a API paga tinha custo e, principalmente, com dados estruturados dá pra medir o desempenho de forma objetiva. Isso está explicado na seção 1.4 do relatório.
 >
-> Usamos os conceitos da disciplina de: aprendizado supervisionado, com dois tipos de tarefa — classificação, pra prever a categoria de risco (baixo, médio ou alto), e regressão, pra prever o resultado líquido da empresa. Treinamos dois algoritmos de classificação (Regressão Logística e Random Forest) e dois de regressão (Regressão Linear e Random Forest Regressor), e avaliamos todos com validação cruzada, que é uma técnica pra garantir que os resultados não dependam de sorte na divisão dos dados.
+> Usamos aprendizado supervisionado em duas tarefas: classificação, pra prever o risco (baixo, médio ou alto), e regressão, pra prever o resultado líquido. Avaliamos com validação cruzada repetida e sempre comparando com um baseline — o 'chute' de responder sempre a classe mais comum.
 >
-> Uma decisão importante foi: para evitar uma previsão 'óbvia demais', a gente NÃO deixou o modelo ver o patrimônio líquido ou o resultado líquido como entrada — porque é justamente a partir deles que a gente define o rótulo de risco. Isso seria uma espécie de trapaça estatística, chamada de vazamento de rótulo."
+> Dois cuidados importantes: o modelo não vê patrimônio líquido nem resultado, que definem o rótulo — senão seria vazamento de rótulo; e as quatro varejistas do estudo de caso ficam fora do treino, pra testar o modelo em empresas que ele nunca viu."
 
-**Tela:** Seção 5 (Metodologia) do relatório, destacando a lista de features usadas.
+**Tela:** Seção 5 (Metodologia) do relatório.
 
 ---
 
-## 4. Solução proposta e demonstração do artefato (2:45 – 4:15) — ~90s
+## 4. Solução proposta e demonstração do artefato (2:30 – 4:15) — ~105s
 
 **Fala:**
-> "Construímos o dataset principal a partir dos dados abertos da CVM — processamos as demonstrações financeiras de 2023 de quase 900 empresas abertas brasileiras e conseguimos extrair dados completos de 454 delas. Isso é bem maior que o dataset manual que tínhamos na primeira entrega, com só 19 linhas.
+> "O dataset vem dos dados abertos da CVM: as demonstrações de 2023 e 2024 de todas as companhias abertas — 472 empresas com dados completos em 2023. Na revisão encontramos e corrigimos dois problemas: oito empresas estavam com valores mil vezes maiores, porque informam em reais e não em milhares, e o 'passivo total' da CVM é igual ao ativo.
 >
-> [Mostrem a tela rodando `python treinar_modelos.py` no terminal, ou os gráficos já gerados]
+> [Colab: seções 2 e 3 — distribuição do risco e a conta 2 igual ao ativo em 100%]
 >
-> O modelo de Random Forest classificou corretamente 58,6% das empresas em validação cruzada — acima do baseline de sempre prever a classe mais comum, que seria 55,1%. É uma melhora real, mas modesta: o problema é genuinamente difícil.
+> Resultado honesto: só com receita e ativo, os modelos acertam menos que o chute em acurácia — uns 47% contra 52,6% — e só ganham do baseline na acurácia balanceada e no F1. A regressão logística encontra 73% das empresas de risco alto.
 >
-> E aqui vale contar algo que aconteceu nos bastidores: numa primeira versão, testamos o modelo nas quatro varejistas que estudamos desde a primeira entrega usando o MESMO modelo treinado com elas incluídas no treino — e ele acertou as 4 de 4. Só que, numa revisão interna do grupo, percebemos que isso não é um teste válido: o modelo já tinha "visto a resposta" dessas empresas durante o treino. Corrigimos isso treinando um modelo separado, sem essas 4 empresas, e só então aplicando a elas — um teste de verdade. O resultado caiu para 1 acerto em 4, incluindo um erro na própria Americanas, que o modelo classificou como risco médio em vez de alto.
+> [Colab: seção 4 — tabela e matrizes de confusão]
 >
-> [Mostrem a Figura 2 do relatório — o gráfico com as 4 varejistas destacadas]
+> No estudo de caso, fora do treino, o modelo errou as quatro varejistas. Se a gente deixa elas no treino, ele 'acerta' as quatro — mas isso é memorização, não previsão.
 >
-> Achamos importante mostrar essa correção no vídeo, porque ela ilustra bem uma lição central de Machine Learning: testar um modelo nos mesmos dados que ele viu no treino dá uma falsa sensação de que ele funciona bem. E, com só 4 empresas na amostra, um resultado de 1 em 4 também tem bastante variância — o indicador mais confiável continua sendo a validação cruzada nas 454 empresas.
+> [Colab: seção 5 — tabela fora x dentro do treino]
 >
-> Também testamos regressão pra prever o resultado líquido, e aprendemos outra lição importante: depois da correção, o modelo de Regressão Linear teve desempenho pior do que simplesmente chutar a média (R² negativo); já o Random Forest teve R² de 0,31 — melhor, mas longe de perfeito. Isso reforça que três variáveis de tamanho do balanço não bastam para prever com precisão o resultado líquido de empresas tão diferentes quanto bancos e varejistas. A gente discute essa limitação com honestidade no relatório, em vez de esconder."
+> E se a gente coloca uma variável que permite reconstruir o patrimônio líquido, a acurácia salta pra 81% — é o vazamento de rótulo na prática.
+>
+> [Colab: seção 6]
+>
+> O resultado mais promissor é prever o risco do ano seguinte: com os dados de 2023, o Random Forest prevê o risco de 2024 com 87% de acurácia balanceada, acima de simplesmente repetir a classe do ano anterior, e encontra 90% das empresas que estarão em risco alto."
 
-**Tela:** abram o notebook direto no Google Colab (não precisa instalar nada, carrega os dados do GitHub de vocês automaticamente):
+**Tela:** abram o notebook direto no Google Colab (carrega os dados do GitHub automaticamente):
 
 **https://colab.research.google.com/github/CristianoMorales/Projeto_IA/blob/main/ml/demo_colab.ipynb**
 
-No menu do Colab: `Ambiente de execução` → `Executar tudo`. Esperem rodar (uns 20-30s) e vão mostrando as células: o gráfico de distribuição de risco, a matriz de confusão, a importância das variáveis, a tabela de regressão, e principalmente a **tabela final da Seção 5** do notebook — a comparação das 4 varejistas com holdout real, mostrando a coluna "Acertou?" com 1 ✅ e 3 ❌ (expliquem rapidamente, como no roteiro acima, por que esse resultado corrigido é mais confiável do que um "4 de 4" obtido testando o modelo nas mesmas empresas usadas no treino).
+No menu do Colab: `Ambiente de execução` → `Executar tudo` (leva cerca de 1 minuto por causa das repetições da validação cruzada — rodem ANTES de começar a gravar e só rolem pelas células durante o vídeo). Mostrem as seções 2 a 7; a seção 8 (regressão) pode ser citada rapidamente.
 
 ---
 
@@ -95,7 +96,7 @@ No menu do Colab: `Ambiente de execução` → `Executar tudo`. Esperem rodar (u
 
 **Tela:** abram `https://github.com/CristianoMorales/Projeto_IA` no navegador e mostrem rapidamente:
 - a pasta `ml/` (scripts de dataset e modelos);
-- a pasta `dataset/` (os dois datasets);
+- a pasta `dataset/` (o dataset da CVM e o dataset manual da N1);
 - o `README.md` (que explica a estrutura e a mudança de opção);
 - o relatório em `relatorio/Relatorio_Projeto_N2.pdf`.
 
@@ -106,7 +107,7 @@ No menu do Colab: `Ambiente de execução` → `Executar tudo`. Esperem rodar (u
 
 ## Checklist antes de gravar
 
-- [ ] Abrir o Colab (https://colab.research.google.com/github/CristianoMorales/Projeto_IA/blob/main/ml/demo_colab.ipynb) uma vez ANTES de gravar e rodar tudo, só pra garantir que carrega sem erro e saber quanto tempo demora.
+- [ ] Abrir o Colab (https://colab.research.google.com/github/CristianoMorales/Projeto_IA/blob/main/ml/demo_colab.ipynb) e rodar tudo ANTES de gravar (cerca de 1 minuto), só pra garantir que carrega sem erro.
 - [ ] Ter o relatório em PDF aberto, já na página certa de cada seção mencionada.
 - [ ] Ter o GitHub aberto numa aba, já logado/carregado.
 - [ ] Cronometrar um ensaio — o vídeo **não pode passar de 5 minutos**.

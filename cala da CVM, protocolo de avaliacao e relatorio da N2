@@ -1,0 +1,65 @@
+--- 96cf520 14/11 00:31 Cristiano: Merge remote-tracking branch 'origin/main'
+--- 9e0a87d 14/11 00:30 Cristiano: Corrige 3 problemas metodologicos graves da revisao interna do grupo
+
+M	dataset/README.md
+M	dataset/cvm_dfp_2023_empresas.csv
+M	ml/build_dataset.py
+M	ml/demo_colab.ipynb
+M	ml/demo_colab.py
+M	ml/eda_cvm.py
+M	ml/figuras/alavancagem_por_risco.png
+M	ml/figuras/confusao_random_forest.png
+M	ml/figuras/confusao_regressao_logistica.png
+M	ml/figuras/dispersao_ativo_resultado.png
+M	ml/figuras/distribuicao_risco.png
+M	ml/treinar_modelos.py
+M	relatorio/Relatorio_Projeto_N2.docx
+M	relatorio/Relatorio_Projeto_N2.pdf
+M	relatorio/build_report_n2.js
+M	video/roteiro.md
+--- 493936e 13/11 21:14 Cristiano Morales: Criado através do Colab
+
+A	ml/projeto_IA.ipynb
+--- c59e0ee 14/11 00:11 Cristiano: N2: adiciona notebook de demo para Google Colab (sem instalacao local) e atualiza roteiro do video
+
+A	ml/demo_colab.ipynb
+A	ml/demo_colab.py
+M	video/roteiro.md
+--- 3813453 14/11 00:07 Cristiano: N2: pivot para Opcao Framework - dataset CVM (474 empresas), modelos de classificacao/regressao, relatorio N2 e roteiro do video
+
+M	.gitignore
+M	README.md
+M	dataset/README.md
+A	dataset/cvm_dfp_2023_empresas.csv
+A	ml/build_dataset.py
+A	ml/eda_cvm.py
+A	ml/figuras/alavancagem_por_risco.png
+A	ml/figuras/confusao_random_forest.png
+A	ml/figuras/confusao_regressao_logistica.png
+A	ml/figuras/dispersao_ativo_resultado.png
+A	ml/figuras/distribuicao_risco.png
+A	ml/treinar_modelos.py
+D	rag/README.md
+D	rag/build_corpus.py
+D	rag/corpus/americanas_2022_resultado.txt
+D	rag/corpus/americanas_2023_fato_relevante.txt
+D	rag/corpus/americanas_2023_resultado.txt
+D	rag/corpus/americanas_2024_resultado.txt
+D	rag/corpus/lojasrenner_2021_2024_resultado.txt
+D	rag/corpus/magazineluiza_2022_resultado.txt
+D	rag/corpus/magazineluiza_2023_resultado.txt
+D	rag/corpus/viacasasbahia_2022_resultado.txt
+D	rag/corpus/viacasasbahia_2023_2024_resultado.txt
+D	rag/fontes_corpus.csv
+D	rag/gerar_respostas.py
+D	rag/requirements.txt
+D	rag/retrieval.py
+A	relatorio/Relatorio_Projeto_N2.docx
+A	relatorio/Relatorio_Projeto_N2.pdf
+A	relatorio/build_report_n2.js
+A	video/roteiro.md
+--- a9b9a51 13/11 15:50 Cristiano: N2: atualiza cabecalhos e relatorio para incluir Ali Ahmad como 4o integrante
+
+M	notebooks/eda_prep.ipynb
+M	notebooks/eda_prep.py
+M	relatorio/build_report.js

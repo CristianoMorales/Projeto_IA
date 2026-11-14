@@ -1,5 +1,5 @@
 # Dados brutos da CVM (publicos, volumosos, re-obteniveis em dados.cvm.gov.br)
-# - apenas o dataset PROCESSADO (dataset/cvm_dfp_2023_empresas.csv) e versionado
+# - apenas o dataset PROCESSADO (dataset/cvm_dfp_empresas.csv) e versionado
 ml/cvm_raw/
 
 # Python
@@ -10,3 +10,6 @@ __pycache__/
 # SO
 .DS_Store
 Thumbs.db
+
+# Node (gerador do relatorio)
+node_modules/

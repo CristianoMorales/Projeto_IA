@@ -1,0 +1,344 @@
+{
+  "dataset_2023": {
+    "empresas": 472,
+    "treino_sem_varejistas": 468,
+    "distribuicao_risco": {
+      "baixo": 182,
+      "medio": 248,
+      "alto": 42
+    },
+    "classe_mais_comum": "medio",
+    "acuracia_chute_classe_mais_comum": 0.5254,
+    "conta2_igual_ativo_pct": 1.0
+  },
+  "A_classificacao_cv5": {
+    "original_N2": {
+      "variaveis": "receita, ativo e conta 2 (igual ao ativo: variável repetida)",
+      "modelos": {
+        "Baseline (classe mais comum)": {
+          "acuracia": 0.5256,
+          "acuracia_balanceada": 0.3333,
+          "f1_macro": 0.2297,
+          "acuracia_balanceada_dp": 0.0,
+          "recall_por_classe": {
+            "baixo": 0.0,
+            "medio": 1.0,
+            "alto": 0.0
+          }
+        },
+        "Regressão Logística": {
+          "acuracia": 0.441,
+          "acuracia_balanceada": 0.5064,
+          "f1_macro": 0.4048,
+          "acuracia_balanceada_dp": 0.0087,
+          "recall_por_classe": {
+            "baixo": 0.2663,
+            "medio": 0.5211,
+            "alto": 0.7317
+          }
+        },
+        "Random Forest": {
+          "acuracia": 0.4432,
+          "acuracia_balanceada": 0.4126,
+          "f1_macro": 0.3981,
+          "acuracia_balanceada_dp": 0.0172,
+          "recall_por_classe": {
+            "baixo": 0.4475,
+            "medio": 0.4585,
+            "alto": 0.3317
+          }
+        }
+      }
+    },
+    "corrigido": {
+      "variaveis": "receita e ativo (sem variável repetida, sem vazamento)",
+      "modelos": {
+        "Baseline (classe mais comum)": {
+          "acuracia": 0.5256,
+          "acuracia_balanceada": 0.3333,
+          "f1_macro": 0.2297,
+          "acuracia_balanceada_dp": 0.0,
+          "recall_por_classe": {
+            "baixo": 0.0,
+            "medio": 1.0,
+            "alto": 0.0
+          }
+        },
+        "Regressão Logística": {
+          "acuracia": 0.4406,
+          "acuracia_balanceada": 0.506,
+          "f1_macro": 0.4043,
+          "acuracia_balanceada_dp": 0.0089,
+          "recall_por_classe": {
+            "baixo": 0.2652,
+            "medio": 0.5212,
+            "alto": 0.7317
+          }
+        },
+        "Random Forest": {
+          "acuracia": 0.4744,
+          "acuracia_balanceada": 0.4402,
+          "f1_macro": 0.4238,
+          "acuracia_balanceada_dp": 0.0272,
+          "recall_por_classe": {
+            "baixo": 0.474,
+            "medio": 0.4951,
+            "alto": 0.3512
+          }
+        }
+      }
+    },
+    "diagnostico_vazamento": {
+      "variaveis": "com passivo exigível: ativo − passivo = PL (vazamento)",
+      "modelos": {
+        "Baseline (classe mais comum)": {
+          "acuracia": 0.5256,
+          "acuracia_balanceada": 0.3333,
+          "f1_macro": 0.2297,
+          "acuracia_balanceada_dp": 0.0,
+          "recall_por_classe": {
+            "baixo": 0.0,
+            "medio": 1.0,
+            "alto": 0.0
+          }
+        },
+        "Regressão Logística": {
+          "acuracia": 0.8086,
+          "acuracia_balanceada": 0.8371,
+          "f1_macro": 0.8175,
+          "acuracia_balanceada_dp": 0.0023,
+          "recall_por_classe": {
+            "baixo": 0.7746,
+            "medio": 0.8146,
+            "alto": 0.9219
+          }
+        },
+        "Random Forest": {
+          "acuracia": 0.6791,
+          "acuracia_balanceada": 0.667,
+          "f1_macro": 0.6731,
+          "acuracia_balanceada_dp": 0.013,
+          "recall_por_classe": {
+            "baixo": 0.653,
+            "medio": 0.7041,
+            "alto": 0.6439
+          }
+        }
+      }
+    }
+  },
+  "importancia_rf": {
+    "original_N2": {
+      "receita_liquida": 0.3508,
+      "ativo_total": 0.3247,
+      "passivo_total": 0.3246
+    },
+    "corrigido": {
+      "receita_liquida": 0.5017,
+      "ativo_total": 0.4983
+    }
+  },
+  "A_sem_financeiras_cv5": {
+    "empresas": 434,
+    "modelos": {
+      "Baseline (classe mais comum)": {
+        "acuracia": 0.5115,
+        "acuracia_balanceada": 0.3333,
+        "f1_macro": 0.2256,
+        "acuracia_balanceada_dp": 0.0,
+        "recall_por_classe": {
+          "baixo": 0.0,
+          "medio": 1.0,
+          "alto": 0.0
+        }
+      },
+      "Regressão Logística": {
+        "acuracia": 0.412,
+        "acuracia_balanceada": 0.4877,
+        "f1_macro": 0.3942,
+        "acuracia_balanceada_dp": 0.0111,
+        "recall_por_classe": {
+          "baixo": 0.3181,
+          "medio": 0.4279,
+          "alto": 0.7171
+        }
+      },
+      "Random Forest": {
+        "acuracia": 0.4659,
+        "acuracia_balanceada": 0.4357,
+        "f1_macro": 0.4175,
+        "acuracia_balanceada_dp": 0.0178,
+        "recall_por_classe": {
+          "baixo": 0.4784,
+          "medio": 0.4775,
+          "alto": 0.3512
+        }
+      }
+    }
+  },
+  "estudo_de_caso_2023": {
+    "acertos_fora_do_treino": 0,
+    "acertos_dentro_do_treino": 4,
+    "n": 4,
+    "tabela": [
+      {
+        "varejista": "Americanas",
+        "receita_liquida": 14942.0,
+        "resultado_liquido": -2272.0,
+        "patrimonio_liquido": -28850.0,
+        "ativo_total": 27115.0,
+        "passivo_exigivel": 55965.0,
+        "risco_real": "alto",
+        "previsto_fora_do_treino": "medio",
+        "previsto_dentro_do_treino_protocolo_antigo": "alto"
+      },
+      {
+        "varejista": "Grupo Casas Bahia",
+        "receita_liquida": 28847.0,
+        "resultado_liquido": -2625.0,
+        "patrimonio_liquido": 3454.0,
+        "ativo_total": 31996.0,
+        "passivo_exigivel": 28542.0,
+        "risco_real": "medio",
+        "previsto_fora_do_treino": "baixo",
+        "previsto_dentro_do_treino_protocolo_antigo": "medio"
+      },
+      {
+        "varejista": "Lojas Renner",
+        "receita_liquida": 13647.8,
+        "resultado_liquido": 976.3,
+        "patrimonio_liquido": 10047.2,
+        "ativo_total": 20490.6,
+        "passivo_exigivel": 10443.4,
+        "risco_real": "baixo",
+        "previsto_fora_do_treino": "medio",
+        "previsto_dentro_do_treino_protocolo_antigo": "baixo"
+      },
+      {
+        "varejista": "Magazine Luiza",
+        "receita_liquida": 36768.1,
+        "resultado_liquido": -979.1,
+        "patrimonio_liquido": 9610.5,
+        "ativo_total": 37455.1,
+        "passivo_exigivel": 27844.5,
+        "risco_real": "medio",
+        "previsto_fora_do_treino": "baixo",
+        "previsto_dentro_do_treino_protocolo_antigo": "medio"
+      }
+    ]
+  },
+  "B_temporal_2023_para_2024": {
+    "empresas_nos_dois_anos": 446,
+    "treino_sem_varejistas": 442,
+    "variaveis": [
+      "receita",
+      "ativo",
+      "margem",
+      "pl_sobre_ativo",
+      "prejuizo"
+    ],
+    "mudaram_de_classe_pct": 0.1345,
+    "modelos": {
+      "Baseline (classe mais comum)": {
+        "acuracia": 0.5023,
+        "acuracia_balanceada": 0.3333,
+        "f1_macro": 0.2229,
+        "acuracia_balanceada_dp": 0.0,
+        "recall_por_classe": {
+          "baixo": 0.0,
+          "medio": 1.0,
+          "alto": 0.0
+        }
+      },
+      "Regressão Logística": {
+        "acuracia": 0.8357,
+        "acuracia_balanceada": 0.8453,
+        "f1_macro": 0.8333,
+        "acuracia_balanceada_dp": 0.0052,
+        "recall_por_classe": {
+          "baixo": 0.8437,
+          "medio": 0.8225,
+          "alto": 0.8696
+        }
+      },
+      "Random Forest": {
+        "acuracia": 0.8634,
+        "acuracia_balanceada": 0.8738,
+        "f1_macro": 0.8611,
+        "acuracia_balanceada_dp": 0.004,
+        "recall_por_classe": {
+          "baixo": 0.8586,
+          "medio": 0.8586,
+          "alto": 0.9043
+        }
+      },
+      "Persistência (repete o risco de 2023)": {
+        "acuracia": 0.8665,
+        "acuracia_balanceada": 0.8444,
+        "f1_macro": 0.8614,
+        "recall_por_classe": {
+          "baixo": 0.8678,
+          "medio": 0.8829,
+          "alto": 0.7826
+        },
+        "acuracia_balanceada_dp": 0.0
+      }
+    },
+    "varejistas": [
+      {
+        "varejista": "Americanas",
+        "risco_2023": "alto",
+        "risco_real_2024": "medio",
+        "previsto_2024_fora_do_treino": "alto"
+      },
+      {
+        "varejista": "Grupo Casas Bahia",
+        "risco_2023": "medio",
+        "risco_real_2024": "medio",
+        "previsto_2024_fora_do_treino": "medio"
+      },
+      {
+        "varejista": "Lojas Renner",
+        "risco_2023": "baixo",
+        "risco_real_2024": "baixo",
+        "previsto_2024_fora_do_treino": "baixo"
+      },
+      {
+        "varejista": "Magazine Luiza",
+        "risco_2023": "medio",
+        "risco_real_2024": "medio",
+        "previsto_2024_fora_do_treino": "medio"
+      }
+    ]
+  },
+  "C_regressao_resultado_cv5": {
+    "variaveis": [
+      "receita_liquida",
+      "ativo_total"
+    ],
+    "modelos": {
+      "Baseline (média)": {
+        "r2": -0.0047,
+        "r2_min": -0.0072,
+        "r2_max": -0.0025,
+        "mae_milhoes": 1825.8,
+        "mediana_erro_abs_milhoes": 1079.0
+      },
+      "Regressão Linear": {
+        "r2": 0.0358,
+        "r2_min": -0.2558,
+        "r2_max": 0.1914,
+        "mae_milhoes": 1504.5,
+        "mediana_erro_abs_milhoes": 374.8
+      },
+      "Random Forest Regressor": {
+        "r2": 0.1998,
+        "r2_min": -0.1147,
+        "r2_max": 0.3497,
+        "mae_milhoes": 1223.4,
+        "mediana_erro_abs_milhoes": 211.8
+      }
+    },
+    "mediana_abs_resultado_milhoes": 192.2
+  }
+}
