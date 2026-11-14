@@ -56,6 +56,16 @@ Principais resultados (validação cruzada de 5 folds repetida 5 vezes, varejist
 
 Detalhes completos no [Relatório do Projeto](relatorio/Relatorio_Projeto_N2.pdf).
 
+## Rodar no Google Colab (sem instalar nada)
+
+[![Abrir no Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/CristianoMorales/Projeto_IA/blob/main/ml/demo_colab.ipynb)
+
+1. Clique no botão acima (é preciso estar logado numa conta Google).
+2. No menu, **Ambiente de execução → Executar tudo**. Se aparecer o aviso "Este notebook não foi criado pelo Google", clique em **Executar mesmo assim**.
+3. Espere cerca de 2 minutos: a primeira célula instala o scikit-learn 1.9.1 (a versão usada no relatório) e as seguintes carregam o dataset direto deste repositório, treinam os modelos e mostram os resultados.
+
+O notebook reproduz os números do relatório: Random Forest com acurácia balanceada de 44,0% no risco de 2023 e de 87,4% na previsão de 2024. Para só ler o notebook já executado, sem rodar nada, abra [`ml/demo_colab.ipynb`](ml/demo_colab.ipynb) aqui no GitHub.
+
 ## Rodar no GitHub Codespaces (ambiente pronto, sem instalar nada)
 
 [![Abrir no GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/CristianoMorales/Projeto_IA)
