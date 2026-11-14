@@ -70,7 +70,11 @@ Historico de atualizacoes:
 >
 > Também testamos regressão pra prever o resultado líquido, e aprendemos uma lição importante: o resultado parecia muito bem previsto (R² de 0,90), mas isso é em grande parte porque empresas gigantes, como bancos, têm lucros gigantes só pelo tamanho — não necessariamente porque o modelo entende bem a relação financeira. A gente discute essa limitação com honestidade no relatório, em vez de esconder."
 
-**Tela:** terminal rodando o script, ou os gráficos `distribuicao_risco.png`, `dispersao_ativo_resultado.png`, `confusao_random_forest.png`.
+**Tela:** abram o notebook direto no Google Colab (não precisa instalar nada, carrega os dados do GitHub de vocês automaticamente):
+
+**https://colab.research.google.com/github/CristianoMorales/Projeto_IA/blob/main/ml/demo_colab.ipynb**
+
+No menu do Colab: `Ambiente de execução` → `Executar tudo`. Esperem rodar (uns 20-30s) e vão mostrando as células: o gráfico de distribuição de risco, a matriz de confusão, a importância das variáveis, a tabela de regressão, e principalmente a **tabela final da Seção 5** do notebook — a comparação das 4 varejistas com a coluna "Acertou?" cheia de ✅.
 
 ---
 
@@ -92,7 +96,7 @@ Historico de atualizacoes:
 
 ## Checklist antes de gravar
 
-- [ ] Testar que `python ml/build_dataset.py`, `python ml/eda_cvm.py` e `python ml/treinar_modelos.py` rodam sem erro na máquina de quem vai gravar (precisa de `ml/cvm_raw/*.csv` — ver `README.md` da raiz do projeto para o link de download).
+- [ ] Abrir o Colab (https://colab.research.google.com/github/CristianoMorales/Projeto_IA/blob/main/ml/demo_colab.ipynb) uma vez ANTES de gravar e rodar tudo, só pra garantir que carrega sem erro e saber quanto tempo demora.
 - [ ] Ter o relatório em PDF aberto, já na página certa de cada seção mencionada.
 - [ ] Ter o GitHub aberto numa aba, já logado/carregado.
 - [ ] Cronometrar um ensaio — o vídeo **não pode passar de 5 minutos**.
