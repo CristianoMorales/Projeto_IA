@@ -25,7 +25,7 @@
 #
 # **Histórico de atualizações:**
 # - 2026-11-14 | Cristiano Morales | Criação do notebook de demonstração para Google Colab, usado na gravação do vídeo da N2.
-# - 2026-11-13 | Leonardo Tonon | Atualizado para o protocolo corrigido: dataset CVM 2023/2024 com escala corrigida, varejistas fora do treino, baselines, acurácia balanceada, diagnóstico de vazamento e experimento temporal.
+# - 2026-11-13 | Leonardo Tonon | Atualizado para o protocolo corrigido: dataset CVM 2023/2024 com escala corrigida, varejistas fora do treino, baselines, acurácia balanceada, diagnóstico de vazamento e experimento temporal. Versão do scikit-learn fixada em 1.9.1 (a mesma do relatório).
 #
 # O notebook carrega o dataset **direto do repositório público no GitHub** (não precisa de upload) e reproduz, célula a célula, os resultados de `ml/treinar_modelos.py`.
 #
@@ -33,6 +33,15 @@
 
 # %% [markdown]
 # ## 1. Carregar o dataset (CVM, DFP 2023 e 2024)
+
+# %%
+# Fixa a versao do scikit-learn usada no relatorio: o Random Forest muda de
+# resultado entre versoes da biblioteca (o Colab vem com outra versao).
+import importlib.metadata as md, subprocess, sys
+VERSAO_SKLEARN = "1.9.1"
+if md.version("scikit-learn") != VERSAO_SKLEARN:
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", f"scikit-learn=={VERSAO_SKLEARN}"], check=True)
+print("scikit-learn", md.version("scikit-learn"))
 
 # %%
 import os
