@@ -1,8 +1,0 @@
-[DOC_ID] americanas_2022_resultado
-[EMPRESA] Americanas
-[PERIODO] 2022
-[FONTE] Demonstracoes financeiras 2022 (pos-descoberta da fraude) - cobertura InfoMoney
-[TIPO_FONTE] Imprensa especializada com base em divulgacao oficial
-[OBS] Texto de sintese original, redigido pelo grupo a partir da fonte citada acima; nao e copia literal de nenhum documento ou materia.
-----------------------------------------------------------------------
-O exercicio de 2022 da Americanas, apurado e divulgado apos a descoberta da fraude contabil em janeiro de 2023, registrou receita liquida de aproximadamente R$ 25,8 bilhoes e prejuizo liquido de cerca de R$ 12,9 bilhoes. O patrimonio liquido tornou-se negativo em aproximadamente R$ 26,7 bilhoes, e a divida bruta saltou para cerca de R$ 37,3 bilhoes, refletindo o reconhecimento das obrigacoes de risco sacado que antes nao apareciam corretamente no balanco. Patrimonio liquido negativo e divida liquida muito superior ao patrimonio sao, neste caso, os sinais de alerta mais evidentes de risco financeiro severo.

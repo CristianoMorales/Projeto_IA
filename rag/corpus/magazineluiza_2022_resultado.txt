@@ -1,8 +1,0 @@
-[DOC_ID] magazineluiza_2022_resultado
-[EMPRESA] Magazine Luiza
-[PERIODO] 2022
-[FONTE] Demonstracoes financeiras 2022 - Magazine Luiza RI
-[TIPO_FONTE] Documento oficial de RI
-[OBS] Texto de sintese original, redigido pelo grupo a partir da fonte citada acima; nao e copia literal de nenhum documento ou materia.
-----------------------------------------------------------------------
-O Magazine Luiza encerrou 2022 com receita liquida de aproximadamente R$ 37,3 bilhoes e prejuizo liquido de cerca de R$ 499 milhoes, o primeiro resultado negativo da companhia em anos, em um contexto de alta da taxa de juros, maior custo de capital de giro e desaceleracao do consumo de bens duraveis no varejo online. O patrimonio liquido permaneceu positivo, em torno de R$ 10,6 bilhoes, e a divida bruta era de aproximadamente R$ 7,1 bilhoes - uma situacao de risco bem menos severa que a das concorrentes Americanas e Via, apesar do prejuizo no exercicio.

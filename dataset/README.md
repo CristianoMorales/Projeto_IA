@@ -1,6 +1,36 @@
-# Dataset — Demonstrativos Financeiros de Varejistas Brasileiras (2020–2024)
+# Datasets do projeto
 
-## Descrição breve
+Este projeto usa **dois datasets**, de dois momentos diferentes:
+
+1. **`cvm_dfp_2023_empresas.csv`** (N2, dataset principal) — 474 companhias de capital aberto brasileiras, extraído dos dados abertos da CVM. Usado para treinar os modelos de classificação e regressão.
+2. **`demonstrativos_financeiros_varejo_br.csv`** (N1, dataset histórico) — 4 varejistas, 2020-2024, capturado manualmente pelo grupo. Reaproveitado na N2 como **estudo de caso** para validar os modelos treinados no dataset CVM.
+
+---
+
+## Dataset 1 — CVM DFP 2023 (`cvm_dfp_2023_empresas.csv`)
+
+### Descrição breve
+
+474 companhias de capital aberto brasileiras, com Receita Líquida, Resultado Líquido, Patrimônio Líquido, Passivo Total e Ativo Total (ano-base 2023, demonstrações consolidadas), além de indicadores derivados (margem líquida, alavancagem, ROE, endividamento) e um rótulo de risco financeiro (`risco_financeiro`: baixo/médio/alto).
+
+### Origem dos dados
+
+Dados **originais, extraídos pelo grupo** a partir dos dados abertos da CVM (Comissão de Valores Mobiliários) — Demonstrações Financeiras Padronizadas (DFP), ano-base 2023, disponíveis publicamente em https://dados.cvm.gov.br/dataset/cia_aberta-doc-dfp. Não são dados sintéticos: são as demonstrações financeiras reais, publicamente divulgadas por exigência legal, de todas as companhias abertas brasileiras que entregaram DFP referente a 2023. O processamento (extração dos valores corretos de cada demonstrativo, cálculo dos indicadores e do rótulo de risco) está em `ml/build_dataset.py`.
+
+Não há dados pessoais/sensíveis — são demonstrações financeiras corporativas públicas, sem necessidade de anonimização.
+
+### Limitações conhecidas
+
+- O código de conta de cada linha do demonstrativo varia entre empresas (profundidade do plano de contas); a extração usa correspondência pela **descrição padronizada** da conta (ex.: "Patrimônio Líquido Consolidado"), não pelo código numérico.
+- O dataset mistura empresas de setores muito diferentes (bancos, seguradoras, indústria, varejo), com estruturas de capital muito distintas — isso é discutido como limitação na seção de Resultados do relatório (ex.: bancos têm alavancagem naturalmente alta sem necessariamente estarem em risco).
+- O rótulo `risco_financeiro` é **heurístico** (patrimônio líquido negativo = alto risco; resultado negativo ou alavancagem > 3x = médio risco; caso contrário, baixo risco), não uma classificação de mercado (rating) oficial.
+- Validado por cruzamento com os números já conhecidos das 4 varejistas do dataset da N1 (ver `ml/build_dataset.py`, saída da validação).
+
+---
+
+## Dataset 2 — Varejo Brasileiro 2020-2024 (`demonstrativos_financeiros_varejo_br.csv`)
+
+### Descrição breve
 
 Este dataset reúne indicadores financeiros anuais consolidados (Receita Líquida, Resultado Líquido, Patrimônio Líquido, Dívida Bruta e Dívida Líquida, em R$ milhões) de quatro varejistas brasileiras de capital aberto:
 
@@ -31,4 +61,4 @@ Não há dados pessoais/sensíveis envolvidos — são demonstrações financeir
 
 ## Uso pretendido no projeto
 
-Este dataset alimenta a análise exploratória de dados (Python) da entrega N1. Na N2, os textos completos dos relatórios de RI dessas mesmas empresas serão usados como corpus para a solução baseada em LLM (Opção API de LLM), que deverá resumir, comparar e sinalizar riscos financeiros a partir da leitura desses documentos.
+Este dataset alimentou a análise exploratória de dados (Python) da entrega N1. Na N2 (após a migração para a Opção Framework), ele é reaproveitado como **estudo de caso de validação**: os modelos de classificação treinados no dataset CVM (acima) são aplicados a estas mesmas 4 empresas, e o risco previsto é comparado com o que se sabe ter de fato acontecido com cada uma (ex.: Americanas em recuperação judicial = risco alto esperado).

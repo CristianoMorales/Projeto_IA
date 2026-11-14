@@ -1,8 +1,0 @@
-[DOC_ID] magazineluiza_2023_resultado
-[EMPRESA] Magazine Luiza
-[PERIODO] 2023
-[FONTE] Demonstracoes financeiras 31/12/2023 - Magazine Luiza RI
-[TIPO_FONTE] Demonstracao financeira oficial (auditada)
-[OBS] Texto de sintese original, redigido pelo grupo a partir da fonte citada acima; nao e copia literal de nenhum documento ou materia.
-----------------------------------------------------------------------
-Em 2023, o Magazine Luiza manteve receita liquida praticamente estavel, em torno de R$ 36,8 bilhoes, mas o prejuizo liquido do exercicio se aprofundou para aproximadamente R$ 979 milhoes segundo as demonstracoes financeiras oficiais da companhia. Por outro lado, a empresa reduziu sua divida bruta para cerca de R$ 5,4 bilhoes (de R$ 7,1 bilhoes em 2022), sinalizando um esforco de desalavancagem mesmo durante o periodo de prejuizo. O patrimonio liquido seguiu positivo, em torno de R$ 9,6 bilhoes. Reportagens do final de 2023 e inicio de 2024 sobre o resultado do 4o trimestre destacaram sinais de melhora operacional trimestral (reducao de despesas, geracao de caixa no trimestre), mesmo com o resultado anual acumulado ainda negativo - uma distincao importante entre tendencia trimestral e resultado anual que o sistema de analise deve conseguir diferenciar.

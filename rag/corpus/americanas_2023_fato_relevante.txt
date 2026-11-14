@@ -1,8 +1,0 @@
-[DOC_ID] americanas_2023_fato_relevante
-[EMPRESA] Americanas
-[PERIODO] jan/2023
-[FONTE] Fato Relevante Americanas S.A. (11/01/2023) + cobertura InfoMoney/Poder360
-[TIPO_FONTE] Fato relevante oficial + imprensa especializada
-[OBS] Texto de sintese original, redigido pelo grupo a partir da fonte citada acima; nao e copia literal de nenhum documento ou materia.
-----------------------------------------------------------------------
-Em 11 de janeiro de 2023, a Americanas S.A. (AMER3) divulgou fato relevante informando a identificacao de inconsistencias contabeis da ordem de R$ 20 bilhoes, relacionadas principalmente a operacoes de risco sacado (financiamento a fornecedores) que nao estavam sendo reconhecidas corretamente no passivo da companhia. O caso levou a troca imediata da diretoria executiva, a abertura de investigacoes pela CVM e pela Policia Federal, e culminou no pedido de recuperacao judicial da empresa em 19 de janeiro de 2023, um dos maiores da historia do varejo brasileiro. Apos a revisao contabil, o resultado de 2021 - originalmente divulgado como lucro liquido de R$ 544 milhoes - foi reapresentado como prejuizo de R$ 6,2 bilhoes. O episodio se tornou referencia em discussoes sobre governanca corporativa e qualidade de divulgacao financeira no mercado brasileiro.

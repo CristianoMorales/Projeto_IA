@@ -1,8 +1,0 @@
-[DOC_ID] americanas_2023_resultado
-[EMPRESA] Americanas
-[PERIODO] 2023
-[FONTE] Americanas tem prejuizo de R$ 2,27 bilhoes em 2023 - Poder360
-[TIPO_FONTE] Imprensa especializada
-[OBS] Texto de sintese original, redigido pelo grupo a partir da fonte citada acima; nao e copia literal de nenhum documento ou materia.
-----------------------------------------------------------------------
-Em 2023, ja sob recuperacao judicial, a Americanas reduziu fortemente sua operacao: a receita liquida caiu para cerca de R$ 14,9 bilhoes (quase a metade do ano anterior) e o prejuizo liquido foi de aproximadamente R$ 2,27 bilhoes, bem menor que o prejuizo de 2022, mas ainda negativo. O patrimonio liquido seguiu negativo, em torno de R$ 28,8 bilhoes, e a divida bruta aumentou para cerca de R$ 39,4 bilhoes. O plano de recuperacao judicial, homologado ao longo de 2023, previa alongamento e renegociacao de dividas com credores como condicao para a continuidade da empresa.

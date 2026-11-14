@@ -1,15 +1,11 @@
-# Chaves e segredos - NUNCA commitar
-.env
-*.env
-!.env.example
+# Dados brutos da CVM (publicos, volumosos, re-obteniveis em dados.cvm.gov.br)
+# - apenas o dataset PROCESSADO (dataset/cvm_dfp_2023_empresas.csv) e versionado
+ml/cvm_raw/
 
 # Python
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-
-# Saidas geradas localmente (podem ser regeneradas pelos scripts)
-rag/outputs/
 
 # SO
 .DS_Store

@@ -1,8 +1,0 @@
-[DOC_ID] viacasasbahia_2022_resultado
-[EMPRESA] Via/Grupo Casas Bahia
-[PERIODO] 2022
-[FONTE] Via Varejo tem prejuizo de R$ 342 milhoes em 2022 - Poder360
-[TIPO_FONTE] Imprensa especializada
-[OBS] Texto de sintese original, redigido pelo grupo a partir da fonte citada acima; nao e copia literal de nenhum documento ou materia.
-----------------------------------------------------------------------
-Em 2022, ainda sob a razao social Via S.A., a companhia registrou prejuizo liquido de aproximadamente R$ 342 milhoes, em meio a um cenario de alta de juros, maior inadimplencia no credito ao consumidor e pressao de custos logisticos no varejo fisico e online. O resultado reforcou o processo de reestruturacao que a companhia vinha conduzindo, incluindo revisao de portfolio de lojas e foco em categorias mais rentaveis, que antecedeu o rebranding para Grupo Casas Bahia nos anos seguintes.
