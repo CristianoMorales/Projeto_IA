@@ -4,7 +4,7 @@
 #
 # Titulo do arquivo: eda_cvm.py
 # Sintese do conteudo: Analise exploratoria complementar (N2) do dataset
-#   dataset/cvm_dfp_2023_empresas.csv (474 empresas, CVM DFP 2023): gera
+#   dataset/cvm_dfp_2023_empresas.csv (454 empresas, CVM DFP 2023): gera
 #   visualizacoes da distribuicao de risco financeiro, da relacao entre
 #   tamanho do ativo e resultado liquido (destacando as 4 varejistas do
 #   estudo de caso) e da alavancagem por categoria de risco.
@@ -18,6 +18,12 @@
 # Historico de atualizacoes:
 #   2026-11-13 | Cristiano Morales | Criacao das visualizacoes de apoio ao
 #               relatorio da N2 (dataset CVM ampliado).
+#   2026-11-14 | Cristiano Morales | Dataset corrigido (ver ml/build_dataset.py,
+#               correcao do bug passivo_total==ativo_total): 474 -> 454
+#               empresas. Como este script le os totais/contagens direto do
+#               CSV (nao usa valores fixos), as figuras ja refletem os novos
+#               numeros automaticamente; so o rotulo do eixo da alavancagem
+#               foi ajustado para "passivo exigivel total".
 # =============================================================================
 
 import os
@@ -75,7 +81,7 @@ def main():
 
     ax1.set_xlabel("log10(ativo total, R$ milhões)")
     ax1.set_ylabel("Resultado líquido (R$ milhões)")
-    ax1.set_title("Todas as 474 empresas")
+    ax1.set_title(f"Todas as {len(df)} empresas")
     ax1.legend(fontsize=7, loc="upper left")
 
     margem = 0.35
@@ -114,7 +120,7 @@ def main():
     if len(dados[2]) == 0:
         ax.text(3, ax.get_ylim()[1] * 0.5, "N/A\n(patrimônio líquido\nnegativo)",
                 ha="center", va="center", fontsize=8.5, color="#c62828")
-    ax.set_ylabel("Alavancagem (passivo total / PL), truncada em 20x")
+    ax.set_ylabel("Alavancagem (passivo exigível total / PL), truncada em 20x")
     ax.set_title("Alavancagem por categoria de risco")
     fig.tight_layout()
     fig.savefig(os.path.join(FIG_DIR, "alavancagem_por_risco.png"), dpi=140)

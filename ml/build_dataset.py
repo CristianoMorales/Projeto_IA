@@ -99,10 +99,22 @@ def carregar():
 
     resultado = _extrair_conta(dre, _RESULTADO_PADROES, "resultado_liquido")
 
-    # Passivo total: CD_CONTA == "2" (fixo e estavel em todas as empresas)
-    passivo = bpp[(bpp["CD_CONTA"] == "2") & (bpp["ORDEM_EXERC"] == "ÚLTIMO")]
-    passivo = passivo.drop_duplicates(subset=["CNPJ_CIA"], keep="first")
-    passivo = passivo.set_index("CNPJ_CIA")["VL_CONTA"].rename("passivo_total")
+    # IMPORTANTE (correcao pos-revisao do grupo, 14/11/2026): o codigo "2" da
+    # BPP e rotulado "Passivo Total" na CVM, mas na estrutura de contas da
+    # CVM esse codigo JA INCLUI o Patrimonio Liquido como subconta (2.01
+    # Passivo Circulante + 2.02 Passivo Nao Circulante + 2.03 Patrimonio
+    # Liquido = 2 Passivo Total) - ou seja, "Passivo Total" (codigo 2) e,
+    # por construcao contabil, SEMPRE IGUAL ao Ativo Total (identidade
+    # Ativo = Passivo+PL). Usar o codigo "2" como variavel de entrada do
+    # modelo e um erro: ele duplica a coluna ativo_total (confirmado
+    # empiricamente: diferenca = 0,0 em todas as 474 empresas). A correcao
+    # extrai separadamente o Passivo Circulante (2.01) e o Passivo Nao
+    # Circulante (2.02) - as obrigacoes com terceiros, excluindo o PL -
+    # casando pela DESCRICAO da conta (nao pelo codigo), pois a descricao de
+    # 2.01/2.02 varia por tipo de instituicao (ex.: bancos/seguradoras usam
+    # rotulos diferentes de "Passivo Circulante").
+    passivo_circ = _extrair_conta(bpp, "passivo circulante", "passivo_circulante")
+    passivo_nao_circ = _extrair_conta(bpp, "passivo nao circulante", "passivo_nao_circulante")
 
     patrimonio = _extrair_conta(bpp, _PL_PADRAO, "patrimonio_liquido")
 
@@ -115,7 +127,7 @@ def carregar():
     nomes = dre[["CNPJ_CIA", "DENOM_CIA", "CD_CVM"]].drop_duplicates(subset=["CNPJ_CIA"])
     nomes = nomes.set_index("CNPJ_CIA")
 
-    base = nomes.join([receita, resultado, passivo, patrimonio, ativo], how="inner")
+    base = nomes.join([receita, resultado, passivo_circ, passivo_nao_circ, patrimonio, ativo], how="inner")
     return base.reset_index()
 
 
@@ -124,8 +136,16 @@ def calcular_indicadores(df):
     # Unidade dos valores e "MIL" (milhares de reais) na maior parte dos
     # arquivos DFP; convertendo para milhoes para ficar no mesmo padrao do
     # dataset manual da N1.
-    for col in ["receita_liquida", "resultado_liquido", "passivo_total", "patrimonio_liquido", "ativo_total"]:
+    for col in ["receita_liquida", "resultado_liquido", "passivo_circulante",
+                "passivo_nao_circulante", "patrimonio_liquido", "ativo_total"]:
         df[col] = df[col] / 1000.0  # mil -> milhoes
+
+    # Passivo exigivel total (obrigacoes com terceiros, EXCLUINDO patrimonio
+    # liquido) - usado so para calcular alavancagem/endividamento/rotulo de
+    # risco, nunca como feature de entrada do modelo (ver ml/treinar_modelos.py:
+    # usar ativo_total junto com este valor permitiria reconstruir o
+    # patrimonio liquido por subtracao, o que seria vazamento de rotulo).
+    df["passivo_exigivel_total"] = df["passivo_circulante"] + df["passivo_nao_circulante"]
 
     df["margem_liquida_pct"] = np.where(
         df["receita_liquida"] != 0,
@@ -134,7 +154,7 @@ def calcular_indicadores(df):
     )
     df["alavancagem"] = np.where(
         df["patrimonio_liquido"] > 0,
-        df["passivo_total"] / df["patrimonio_liquido"],
+        df["passivo_exigivel_total"] / df["patrimonio_liquido"],
         np.nan,
     )
     df["roe_pct"] = np.where(
@@ -144,7 +164,7 @@ def calcular_indicadores(df):
     )
     df["endividamento_ativo_pct"] = np.where(
         df["ativo_total"] != 0,
-        100 * df["passivo_total"] / df["ativo_total"],
+        100 * df["passivo_exigivel_total"] / df["ativo_total"],
         np.nan,
     )
     df["patrimonio_liquido_negativo"] = (df["patrimonio_liquido"] < 0).astype(int)
@@ -181,7 +201,7 @@ def main():
     padrao = "|".join(re.escape(a) for a in alvo)
     encontrados = df[df["DENOM_CIA"].str.contains(padrao, case=False, na=False)]
     cols = ["DENOM_CIA", "receita_liquida", "resultado_liquido", "patrimonio_liquido",
-            "passivo_total", "margem_liquida_pct", "alavancagem", "risco_financeiro"]
+            "passivo_circulante", "passivo_exigivel_total", "margem_liquida_pct", "alavancagem", "risco_financeiro"]
     with pd.option_context("display.float_format", lambda x: f"{x:,.1f}"):
         print(encontrados[cols].to_string(index=False))
 

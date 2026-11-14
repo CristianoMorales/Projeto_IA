@@ -16,6 +16,12 @@ Integrantes do grupo:
 
 Historico de atualizacoes:
   2026-11-13 | Cristiano Morales | Criacao do roteiro do video da N2.
+  2026-11-14 | Cristiano Morales | Atualizacao dos numeros apos correcao de
+              3 problemas metodologicos (revisao interna do grupo): dataset
+              454 empresas (era 474), acuracia do Random Forest 58,6% com
+              comparacao explicita ao baseline (era so "47,7%"), e estudo
+              de caso com holdout real (1 de 4 acertos, era "4 de 4" com
+              vazamento treino/teste).
 -->
 
 # Roteiro do vídeo — N2 (máximo 5 minutos)
@@ -38,7 +44,7 @@ Historico de atualizacoes:
 **Fala (ideias-chave, adaptem com suas palavras):**
 > "O projeto nasce de um caso real: a fraude contábil da Americanas, revelada em janeiro de 2023, que transformou um lucro declarado de R$ 544 milhões em um prejuízo de R$ 6,2 bilhões. Isso mostra como é difícil, analisando balanços manualmente, perceber a tempo que uma empresa está em risco financeiro grave.
 >
-> A pergunta que guiou o projeto foi: será que dá pra usar só alguns números simples do balanço de uma empresa — receita, ativo total e passivo total — para prever automaticamente se ela está em risco financeiro, sem precisar ler relatórios inteiros?"
+> A pergunta que guiou o projeto foi: será que dá pra usar só alguns números simples do balanço de uma empresa — receita, ativo total e passivo circulante — para prever automaticamente se ela está em risco financeiro, sem precisar ler relatórios inteiros?"
 
 **Tela:** gráfico `fig_americanas_restatement.png` (dataset/) e/ou a Seção 2 do relatório (Descrição do Problema).
 
@@ -60,21 +66,25 @@ Historico de atualizacoes:
 ## 4. Solução proposta e demonstração do artefato (2:45 – 4:15) — ~90s
 
 **Fala:**
-> "Construímos o dataset principal a partir dos dados abertos da CVM — processamos as demonstrações financeiras de 2023 de quase 900 empresas abertas brasileiras e conseguimos extrair dados completos de 474 delas. Isso é bem maior que o dataset manual que tínhamos na primeira entrega, com só 19 linhas.
+> "Construímos o dataset principal a partir dos dados abertos da CVM — processamos as demonstrações financeiras de 2023 de quase 900 empresas abertas brasileiras e conseguimos extrair dados completos de 454 delas. Isso é bem maior que o dataset manual que tínhamos na primeira entrega, com só 19 linhas.
 >
 > [Mostrem a tela rodando `python treinar_modelos.py` no terminal, ou os gráficos já gerados]
 >
-> O modelo de Random Forest classificou corretamente 47,7% das empresas no total — bem acima do que seria só chute — e, mais importante: quando aplicamos o modelo só nas quatro varejistas que estudamos desde a primeira entrega, ele acertou as 4 de 4, incluindo classificar a Americanas como risco alto, exatamente como aconteceu na realidade.
+> O modelo de Random Forest classificou corretamente 58,6% das empresas em validação cruzada — acima do baseline de sempre prever a classe mais comum, que seria 55,1%. É uma melhora real, mas modesta: o problema é genuinamente difícil.
+>
+> E aqui vale contar algo que aconteceu nos bastidores: numa primeira versão, testamos o modelo nas quatro varejistas que estudamos desde a primeira entrega usando o MESMO modelo treinado com elas incluídas no treino — e ele acertou as 4 de 4. Só que, numa revisão interna do grupo, percebemos que isso não é um teste válido: o modelo já tinha "visto a resposta" dessas empresas durante o treino. Corrigimos isso treinando um modelo separado, sem essas 4 empresas, e só então aplicando a elas — um teste de verdade. O resultado caiu para 1 acerto em 4, incluindo um erro na própria Americanas, que o modelo classificou como risco médio em vez de alto.
 >
 > [Mostrem a Figura 2 do relatório — o gráfico com as 4 varejistas destacadas]
 >
-> Também testamos regressão pra prever o resultado líquido, e aprendemos uma lição importante: o resultado parecia muito bem previsto (R² de 0,90), mas isso é em grande parte porque empresas gigantes, como bancos, têm lucros gigantes só pelo tamanho — não necessariamente porque o modelo entende bem a relação financeira. A gente discute essa limitação com honestidade no relatório, em vez de esconder."
+> Achamos importante mostrar essa correção no vídeo, porque ela ilustra bem uma lição central de Machine Learning: testar um modelo nos mesmos dados que ele viu no treino dá uma falsa sensação de que ele funciona bem. E, com só 4 empresas na amostra, um resultado de 1 em 4 também tem bastante variância — o indicador mais confiável continua sendo a validação cruzada nas 454 empresas.
+>
+> Também testamos regressão pra prever o resultado líquido, e aprendemos outra lição importante: depois da correção, o modelo de Regressão Linear teve desempenho pior do que simplesmente chutar a média (R² negativo); já o Random Forest teve R² de 0,31 — melhor, mas longe de perfeito. Isso reforça que três variáveis de tamanho do balanço não bastam para prever com precisão o resultado líquido de empresas tão diferentes quanto bancos e varejistas. A gente discute essa limitação com honestidade no relatório, em vez de esconder."
 
 **Tela:** abram o notebook direto no Google Colab (não precisa instalar nada, carrega os dados do GitHub de vocês automaticamente):
 
 **https://colab.research.google.com/github/CristianoMorales/Projeto_IA/blob/main/ml/demo_colab.ipynb**
 
-No menu do Colab: `Ambiente de execução` → `Executar tudo`. Esperem rodar (uns 20-30s) e vão mostrando as células: o gráfico de distribuição de risco, a matriz de confusão, a importância das variáveis, a tabela de regressão, e principalmente a **tabela final da Seção 5** do notebook — a comparação das 4 varejistas com a coluna "Acertou?" cheia de ✅.
+No menu do Colab: `Ambiente de execução` → `Executar tudo`. Esperem rodar (uns 20-30s) e vão mostrando as células: o gráfico de distribuição de risco, a matriz de confusão, a importância das variáveis, a tabela de regressão, e principalmente a **tabela final da Seção 5** do notebook — a comparação das 4 varejistas com holdout real, mostrando a coluna "Acertou?" com 1 ✅ e 3 ❌ (expliquem rapidamente, como no roteiro acima, por que esse resultado corrigido é mais confiável do que um "4 de 4" obtido testando o modelo nas mesmas empresas usadas no treino).
 
 ---
 
