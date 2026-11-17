@@ -26,6 +26,7 @@
 //               do treino, baselines, acuracia balanceada, vazamento,
 //               experimento temporal); tabelas de resultados; logo_fci.png
 //               restaurado no repositorio.
+//   2026-11-17 | Leonardo Tonon | Link do video no YouTube na Secao 8.
 // =============================================================================
 
 const {
@@ -401,7 +402,7 @@ const s7 = [
 const s8 = [
   sectionHeading("8. Endereço do GitHub e do Vídeo"),
   bodyP("Repositório GitHub (público): https://github.com/CristianoMorales/Projeto_IA"),
-  bodyP("Vídeo no YouTube (até 5 minutos): [ENDEREÇO A SER PREENCHIDO PELO GRUPO APÓS A GRAVAÇÃO E PUBLICAÇÃO DO VÍDEO — ver roteiro em video/roteiro.md no repositório]"),
+  bodyP("Vídeo no YouTube: https://www.youtube.com/watch?v=PzWHHcvsTgY"),
 ];
 
 // ---------- 9. Referências ---------------------------------------------------------
