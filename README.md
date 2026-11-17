@@ -6,6 +6,8 @@ Projeto da disciplina **Inteligência Artificial – 7ºK SI Noite** (Prof. Dr. 
 
 > **Nota sobre a evolução do projeto:** na entrega N1, o grupo havia optado pela "Opção API de LLM", propondo um assistente baseado em modelo de linguagem para análise de documentos de RI. Na N2, o grupo migrou para a **Opção Framework**, pelo custo da API e pela possibilidade de avaliar o modelo de forma quantitativa (validação cruzada, baselines e métricas padronizadas). O dataset original do varejo brasileiro (construído na N1) foi reaproveitado como **estudo de caso de validação**, e um dataset muito maior (dados abertos da CVM, DFP 2023 e 2024 — 472 empresas em 2023) foi construído para o treinamento dos modelos de Machine Learning. Essa mudança está documentada em detalhe na seção "Opção do projeto" do relatório.
 
+**Vídeo de apresentação:** https://www.youtube.com/watch?v=PzWHHcvsTgY
+
 ## Integrantes
 
 | Nome | RA | E-mail |
